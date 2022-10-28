@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { CellComponent } from "./components";
 
 function App() {
   const initialState = ["", "", "", "", "", "", "", "", ""];
+  const cellIndex = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
   const [gameState, setGameState] = useState(initialState);
 
   const [turn, setTurn] = useState(false);
   
   const [gameOver, setGameOver] = useState({over:false, draw:false});
-
-  const cellClickHandler = (index) => {
-    let stateArray = [...gameState];
-    stateArray[index] = turn ? "o" : "x";
-    setGameState(stateArray);
-    setTurn((prev) => !prev);
-  }
 
   const restartHandler = () => {
     setGameState(initialState);
@@ -71,15 +66,11 @@ function App() {
     <div className="App">
       <div id="turn-title">{turn ? "O's Turn" : "X's Turn"}</div>
       <div className={turn ? "board o" : "board x"}>
-        <div className={`cell ${gameState[0]}`} onClick={() => cellClickHandler(0)}></div>
-        <div className={`cell ${gameState[1]}`} onClick={() => cellClickHandler(1)}></div>
-        <div className={`cell ${gameState[2]}`} onClick={() => cellClickHandler(2)}></div>
-        <div className={`cell ${gameState[3]}`} onClick={() => cellClickHandler(3)}></div>
-        <div className={`cell ${gameState[4]}`} onClick={() => cellClickHandler(4)}></div>
-        <div className={`cell ${gameState[5]}`} onClick={() => cellClickHandler(5)}></div>
-        <div className={`cell ${gameState[6]}`} onClick={() => cellClickHandler(6)}></div>
-        <div className={`cell ${gameState[7]}`} onClick={() => cellClickHandler(7)}></div>
-        <div className={`cell ${gameState[8]}`} onClick={() => cellClickHandler(8)}></div>
+        {cellIndex.map(idx => {
+          return (
+            <CellComponent gameData={{gameState: gameState, setGameState: setGameState, turn: turn, setTurn: setTurn}} index={idx} />
+          )
+        })}
       </div>
       <div className={gameOver.over ? "result-message show" : "result-message"} id="result-message">
         <div>{giveResult()}</div>
